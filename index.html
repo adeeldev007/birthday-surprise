@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Gulabo ❤️</title>
+    
+    <!-- Google Fonts for Cinematic Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* === CSS Variables & Base Setup === */
+        :root {
+            --pink: #ff8fab;
+            --wine: #5e0b15;
+            --cream: #fff5e1;
+            --rose-gold: #b76e79;
+            --dark-bg: #110103;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: var(--dark-bg);
+            color: var(--cream);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            transition: background-color 2s ease; /* For lights out effect */
+        }
+
+        /* === BGM Control === */
+        #musicToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--pink);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        #musicToggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* === Backgrounds & Canvases === */
+        #particleCanvas, #roseCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        #sparkleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999; /* Always on top */
+            pointer-events: none; /* Let clicks pass through */
+        }
+
+        #roseCanvas {
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        /* === Scene Management === */
+        .scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease, background 2s ease;
+            z-index: 10;
+        }
+
+        .scene.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: scale(1);
+        }
+
+        .scene.hidden {
+            transform: scale(1.1);
+        }
+
+        /* === Scene 1: Intro === */
+        #scene1 {
+            background: radial-gradient(circle at center, #3a030c 0%, #000000 100%);
+        }
+
+        .btn-glow {
+            background: linear-gradient(135deg, var(--pink), var(--rose-gold));
+            color: var(--wine);
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 143, 171, 0.6);
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            animation: pulse 2s infinite, float 4s ease-in-out infinite;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(45deg);
+            transition: 0.5s;
+            opacity: 0;
+        }
+
+        .btn-glow:hover::after {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px rgba(255, 143, 171, 0.5); }
+            50% { box-shadow: 0 0 35px rgba(255, 143, 171, 0.8), 0 0 10px rgba(255, 255, 255, 0.5); }
+            100% { box-shadow: 0 0 15px rgba(255, 143, 171, 0.5); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* === Scene 2: Glassmorphism Message === */
+        #scene2 {
+            background: linear-gradient(135deg, #4a0e2e 0%, #1c0318 100%);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 143, 171, 0.2);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 650px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .typewriter-text {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            color: var(--cream);
+            text-shadow: 0 0 10px rgba(255, 245, 225, 0.3);
+            white-space: pre-wrap;
+            min-height: 400px; /* Prevents height jumping */
+            text-align: left;
+        }
+
+        .typewriter-text .highlight {
+            color: var(--pink);
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            text-shadow: 0 0 15px rgba(255, 143, 171, 0.6);
+        }
+
+        /* === Scene 3: Interactive Question === */
+        .question-container {
+            opacity: 0;
+            margin-top: 30px;
+            transition: opacity 1s ease;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--pink);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            position: relative;
+            height: 50px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--pink);
+            color: var(--pink);
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 143, 171, 0.1);
+        }
+
+        #btnMaybe {
+            position: relative;
+            z-index: 50;
+        }
+
+        /* === Scene 4: Cake & Finale === */
+        #scene4 {
+            background: radial-gradient(circle at center, #2e0814 0%, #000 100%);
+        }
+
+        .cake-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7));
+            transition: opacity 2s ease;
+        }
+
+        /* SVG Cake Styles */
+        .flame {
+            transform-origin: center bottom;
+            animation: flicker 0.6s ease-in-out infinite alternate;
+            transition: opacity 1s ease;
+        }
+
+        .flame.extinguished {
+            opacity: 0 !important;
+            animation: none;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); fill: #ffcc00; }
+            50% { transform: scale(1.1) rotate(2deg); fill: #ff9900; }
+            100% { transform: scale(0.9) rotate(-1deg); fill: #ffeb66; }
+        }
+
+        .finale-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--pink);
+            text-shadow: 0 0 20px rgba(255, 143, 171, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 2s ease 1s; /* 1s delay */
+        }
+
+        .finale-text.show {
+            opacity: 1;
+            transform: translateY(0);
+            animation: breathingGlow 3s infinite alternate;
+        }
+
+        @keyframes breathingGlow {
+            0% { text-shadow: 0 0 10px rgba(255, 143, 171, 0.4); }
+            100% { text-shadow: 0 0 30px rgba(255, 143, 171, 0.9), 0 0 10px rgba(255, 255, 255, 0.5); }
+        }
+
+        /* Media Queries for Mobile */
+        @media (max-width: 600px) {
+            .btn-glow { font-size: 1.2rem; padding: 15px 30px; }
+            .typewriter-text { font-size: 1rem; min-height: 480px; line-height: 1.6; }
+            .typewriter-text .highlight { font-size: 1.6rem; }
+            .cake-container { width: 250px; height: 250px; }
+            .finale-text { font-size: 2.8rem; }
+            .glass-card { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Highly Reliable, Romantic Classical Music -->
+    <audio id="bgMusic" loop preload="auto" crossorigin="anonymous">
+        <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- UI Controls -->
+    <button id="musicToggle">🔇</button>
+
+    <!-- Canvases -->
+    <canvas id="particleCanvas"></canvas>
+    <canvas id="roseCanvas"></canvas>
+    <canvas id="sparkleCanvas"></canvas> <!-- Magical cursor trail -->
+
+    <!-- SCENE 1: Intro -->
+    <section id="scene1" class="scene active">
+        <button id="startBtn" class="btn-glow">
+            Gulabo ❤️<br>
+            <span style="font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 300;">Click only if you love Adeeeel</span>
+        </button>
+    </section>
+
+    <!-- SCENE 2 & 3: Message Reveal & Interaction -->
+    <section id="scene2" class="scene">
+        <div class="glass-card">
+            <div id="typewriter" class="typewriter-text"></div>
+            
+            <div id="questionContainer" class="question-container">
+                <div class="question-text">Do you know how special you are?</div>
+                <div class="btn-group">
+                    <button id="btnYes" class="btn-secondary">Yes ❤️</button>
+                    <button id="btnMaybe" class="btn-secondary">Maybe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCENE 4: Final Birthday Cake -->
+    <section id="scene4" class="scene">
+        <div class="cake-container" id="cakeContainer">
+            <!-- 3D SVG Cake -->
+            <svg viewBox="0 0 300 300" width="100%" height="100%">
+                <defs>
+                    <linearGradient id="cakeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ff8fab" />
+                        <stop offset="50%" stop-color="#ffb6c1" />
+                        <stop offset="100%" stop-color="#ff8fab" />
+                    </linearGradient>
+                    <linearGradient id="creamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#fff5e1" />
+                        <stop offset="50%" stop-color="#ffffff" />
+                        <stop offset="100%" stop-color="#fff5e1" />
+                    </linearGradient>
+                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="5" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                    
+                    <!-- Beautiful Red Rose Definition -->
+                    <radialGradient id="roseGrad" cx="40%" cy="40%" r="60%">
+                        <stop offset="0%" stop-color="#ff1a40"/>
+                        <stop offset="50%" stop-color="#c0001a"/>
+                        <stop offset="100%" stop-color="#5e000c"/>
+                    </radialGradient>
+                    <g id="red-rose" transform="scale(0.85)">
+                        <!-- Leaves -->
+                        <path d="M0,0 Q-15,-10 -20,5 Q-5,15 0,0" fill="#0f3b15"/>
+                        <path d="M0,0 Q15,-15 25,-5 Q15,10 0,0" fill="#0f3b15"/>
+                        <!-- Flower base -->
+                        <circle cx="0" cy="0" r="14" fill="url(#roseGrad)"/>
+                        <!-- Inner petals -->
+                        <path d="M-8,-2 C-10,-10 5,-12 10,-4 C14,4 5,12 -2,10 C-10,8 -12,2 -8,-2 Z" fill="#d9001d"/>
+                        <path d="M-4,2 C-6,-4 2,-8 6,-2 C10,4 2,8 -2,6 C-6,4 -6,0 -4,-2 Z" fill="#ff1a40"/>
+                        <path d="M-1,1 C-2,-1 1,-3 3,-1 C4,1 1,3 -1,2 Z" fill="#ff4d6a"/>
+                    </g>
+                </defs>
+
+                <!-- Plate -->
+                <ellipse cx="150" cy="250" rx="120" ry="30" fill="#2a0814" />
+                <ellipse cx="150" cy="245" rx="110" ry="25" fill="#3a0c1c" />
+
+                <!-- Cake Base -->
+                <path d="M 50 160 L 50 230 A 100 30 0 0 0 250 230 L 250 160 Z" fill="url(#cakeGrad)" />
+                <ellipse cx="150" cy="230" rx="100" ry="30" fill="url(#cakeGrad)" opacity="0.5"/>
+
+                <!-- Cream Drips & Top -->
+                <path d="M 50 160 Q 60 180 75 160 Q 90 190 110 160 Q 130 185 150 160 Q 170 190 190 160 Q 210 175 230 160 Q 240 180 250 160 L 250 150 A 100 30 0 0 0 50 150 Z" fill="url(#creamGrad)" />
+                <ellipse cx="150" cy="150" rx="100" ry="30" fill="url(#creamGrad)" />
+
+                <!-- Text on Cake -->
+                <text x="150" y="210" font-family="Great Vibes" font-size="24" fill="#5e0b15" text-anchor="middle">Happy Birthday</text>
+                <text x="150" y="235" font-family="Great Vibes" font-size="28" fill="#5e0b15" text-anchor="middle">Gulaboo ❤️</text>
+
+                <!-- Candle 1 -->
+                <rect x="100" y="90" width="10" height="55" fill="#fff" rx="2" />
+                <line x1="105" y1="90" x2="105" y2="80" stroke="#333" stroke-width="2" />
+                <path class="flame f1" d="M 105 55 Q 115 70 105 80 Q 95 70 105 55" fill="#ffcc00" filter="url(#glow)"/>
+
+                <!-- Candle 2 (Center) -->
+                <rect x="145" y="70" width="10" height="75" fill="#fff" rx="2" />
+                <line x1="150" y1="70" x2="150" y2="60" stroke="#333" stroke-width="2" />
+                <path class="flame f2" d="M 150 35 Q 160 50 150 60 Q 140 50 150 35" fill="#ffcc00" filter="url(#glow)"/>
+
+                <!-- Candle 3 -->
+                <rect x="190" y="90" width="10" height="55" fill="#fff" rx="2" />
+                <line x1="195" y1="90" x2="195" y2="80" stroke="#333" stroke-width="2" />
+                <path class="flame f3" d="M 195 55 Q 205 70 195 80 Q 185 70 195 55" fill="#ffcc00" filter="url(#glow)"/>
+
+                <!-- Romantic Red Roses Surrounding the Cake -->
+                <use href="#red-rose" x="65" y="220" />
+                <use href="#red-rose" x="85" y="240" />
+                <use href="#red-rose" x="115" y="250" />
+                <use href="#red-rose" x="150" y="255" />
+                <use href="#red-rose" x="185" y="250" />
+                <use href="#red-rose" x="215" y="240" />
+                <use href="#red-rose" x="235" y="220" />
+            </svg>
+        </div>
+        
+        <button id="blowBtn" class="btn-glow" style="margin-bottom: 30px;">Blow the Candles</button>
+        
+        <div id="finaleText" class="finale-text">
+            Forever yours,<br>
+            Adeeeel ❤️
+        </div>
+    </section>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // === Global Variables & Setup ===
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isMusicPlaying = false;
+
+        // Ensure volume is soft, dreamy
+        bgMusic.volume = 0.5;
+
+        // Music Control
+        musicToggle.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicToggle.innerText = '🔇';
+            } else {
+                bgMusic.play();
+                musicToggle.innerText = '🔊';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+
+        // === MAGICAL CURSOR TRAIL (Fairy Dust) ===
+        const sparkleCanvas = document.getElementById('sparkleCanvas');
+        const sCtx = sparkleCanvas.getContext('2d');
+        let sparkles = [];
+
+        function resizeSparkleCanvas() {
+            sparkleCanvas.width = window.innerWidth;
+            sparkleCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeSparkleCanvas);
+        resizeSparkleCanvas();
+
+        function addSparkle(x, y) {
+            sparkles.push({
+                x: x,
+                y: y,
+                size: Math.random() * 3 + 1,
+                speedX: (Math.random() - 0.5) * 2,
+                speedY: (Math.random() - 0.5) * 2,
+                life: 1, // 100% opacity
+                decay: Math.random() * 0.02 + 0.015,
+                color: `hsl(${Math.random() * 30 + 330}, 100%, 80%)` // Pink/Rose Gold hues
+            });
+        }
+
+        window.addEventListener('mousemove', (e) => addSparkle(e.clientX, e.clientY));
+        window.addEventListener('touchmove', (e) => {
+            for(let i=0; i<e.touches.length; i++) {
+                addSparkle(e.touches[i].clientX, e.touches[i].clientY);
+            }
+        });
+
+        function animateSparkles() {
+            sCtx.clearRect(0, 0, sparkleCanvas.width, sparkleCanvas.height);
+            for (let i = 0; i < sparkles.length; i++) {
+                let p = sparkles[i];
+                sCtx.globalAlpha = p.life;
+                sCtx.beginPath();
+                sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                sCtx.fillStyle = p.color;
+                sCtx.shadowBlur = 10;
+                sCtx.shadowColor = p.color;
+                sCtx.fill();
+                
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.life -= p.decay;
+
+                if (p.life <= 0) {
+                    sparkles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateSparkles);
+        }
+        animateSparkles();
+
+        // === Firefly Particle System (Scene 1 & background) ===
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles;
+
+        function initParticles() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 70; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: Math.random() * 2.5 + 0.5,
+                    dx: (Math.random() - 0.5) * 0.3,
+                    dy: (Math.random() - 0.5) * 0.3,
+                    opacity: Math.random(),
+                    glowDir: Math.random() > 0.5 ? 1 : -1
+                });
+            }
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 204, 153, ${p.opacity})`; // Warm firefly color
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = "rgba(255, 143, 171, 0.8)";
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset for performance
+                
+                // Move gently
+                p.x += p.dx;
+                p.y += p.dy;
+                
+                // Pulse opacity like a firefly
+                p.opacity += p.glowDir * 0.01;
+                if(p.opacity <= 0.1) { p.opacity = 0.1; p.glowDir = 1; }
+                if(p.opacity >= 0.8) { p.opacity = 0.8; p.glowDir = -1; }
+
+                // Wrap around screen
+                if (p.x < 0) p.x = width;
+                if (p.x > width) p.x = 0;
+                if (p.y < 0) p.y = height;
+                if (p.y > height) p.y = 0;
+            });
+            requestAnimationFrame(drawParticles);
+        }
+        initParticles();
+        drawParticles();
+
+        // === Scene Transitions ===
+        function switchScene(fromId, toId) {
+            document.getElementById(fromId).classList.remove('active');
+            document.getElementById(fromId).classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById(toId).classList.remove('hidden');
+                document.getElementById(toId).classList.add('active');
+            }, 500); // Wait for fade out
+        }
+
+        // === Interaction Logic ===
+
+        // 1. Start Button Click
+        document.getElementById('startBtn').addEventListener('click', () => {
+            // Force play audio immediately on click to bypass browser restrictions
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                musicToggle.innerText = '🔊';
+            }).catch(error => {
+                console.log("Audio play blocked, user must click play icon", error);
+            });
+
+            // Soft Heart Explosion
+            confetti({
+                particleCount: 100,
+                spread: 120,
+                origin: { y: 0.6 },
+                colors: ['#ff8fab', '#5e0b15', '#ffffff'],
+                shapes: ['circle'],
+                disableForReducedMotion: true
+            });
+
+            // Transition
+            setTimeout(() => {
+                switchScene('scene1', 'scene2');
+                document.getElementById('roseCanvas').style.opacity = 1;
+                setTimeout(startTypewriter, 1000); // Start typing after scene loads
+            }, 800);
+        });
+
+        // 2. Typewriter Effect
+        const messageLines = [
+            "Happy Birthday, meri jaan, meri <span class='highlight'>Gulabo</span> ❤️\n\n",
+            "Kuch lafz kabhi kaafi nahi hote yeh batane ke liye ki aap mere liye kya ho.\n",
+            "Aap meri duaon ka wo asar ho, jo khuda ne sabse khoobsurat waqt par qabool kiya.\n\n",
+            "Jab se aap meri zindagi mein aayi hain, har lamha jaise theher sa gaya hai.\n",
+            "Aapki woh pyari si muskurahat, aapki choti choti baatein...\n",
+            "Yeh sab meri rooh ka sukoon ban chuki hain.\n\n",
+            "Main shayad duniya ka sabse khushnaseeb insaan hoon,\n",
+            "kyunki mujhe aapka saath mila hai.\n\n",
+            "Khuda kare aapki aankhon mein kabhi koi aansu na aaye, siwaye khushi ke.\n",
+            "Aur yeh rooh jab tak jism mein hai...\n",
+            "Yeh dil sirf aur sirf aapke liye dhadkega.\n\n",
+            "Salgirah Mubarak, meri duniya. ❤️"
+        ];
+
+        async function startTypewriter() {
+            const container = document.getElementById('typewriter');
+            container.innerHTML = "";
+            
+            for (let i = 0; i < messageLines.length; i++) {
+                let line = messageLines[i];
+                // Check if line contains HTML
+                if (line.includes("<span")) {
+                    container.innerHTML += line;
+                    await sleep(800);
+                } else {
+                    for (let j = 0; j < line.length; j++) {
+                        container.innerHTML += line.charAt(j);
+                        await sleep(45); // Romantic typing speed
+                    }
+                    await sleep(600); // Pause at end of line
+                }
+            }
+            
+            // Show interaction buttons
+            setTimeout(() => {
+                document.getElementById('questionContainer').style.opacity = 1;
+            }, 1000);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // 3. Catch me if you can (Maybe Button)
+        const btnMaybe = document.getElementById('btnMaybe');
+        const moveBtn = (e) => {
+            const maxX = window.innerWidth - btnMaybe.offsetWidth - 20;
+            const maxY = window.innerHeight - btnMaybe.offsetHeight - 20;
+            const x = Math.max(20, Math.random() * maxX);
+            const y = Math.max(20, Math.random() * maxY);
+            
+            btnMaybe.style.position = 'fixed';
+            btnMaybe.style.transition = 'all 0.3s ease';
+            btnMaybe.style.left = `${x}px`;
+            btnMaybe.style.top = `${y}px`;
+        };
+
+        btnMaybe.addEventListener('mouseenter', moveBtn);
+        btnMaybe.addEventListener('touchstart', (e) => {
+            e.preventDefault(); 
+            moveBtn();
+        });
+
+        // 4. Yes Button Click
+        document.getElementById('btnYes').addEventListener('click', () => {
+            // Heart Rain
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff8fab']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff8fab']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                } else {
+                    switchScene('scene2', 'scene4');
+                    document.getElementById('roseCanvas').style.opacity = 0;
+                }
+            }());
+        });
+
+        // 5. Blow Candles & Cinematic Finale
+        document.getElementById('blowBtn').addEventListener('click', function() {
+            // 1. Hide flames
+            document.querySelectorAll('.flame').forEach(f => f.classList.add('extinguished'));
+            
+            // 2. Hide button
+            this.style.opacity = 0;
+            setTimeout(() => this.style.display = 'none', 500);
+
+            // 3. CINEMATIC LIGHTS OUT EFFECT
+            document.body.style.backgroundColor = '#000000'; 
+            document.getElementById('scene4').style.background = 'radial-gradient(circle at center, #050002 0%, #000000 100%)';
+            document.getElementById('cakeContainer').style.opacity = '0.3'; // Dim the cake slightly
+
+            // 4. Trigger Whisper
+            try {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance("Happy Birthday Gulabo");
+                    utterance.volume = 0.5; 
+                    utterance.rate = 0.8;   
+                    utterance.pitch = 1.2;  
+                    window.speechSynthesis.speak(utterance);
+                }
+            } catch(e) { console.log("Speech synthesis error", e); }
+
+            // 5. Fireworks Confetti (stands out against the black background)
+            var duration = 10 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+
+            // 6. Show Glowing Final Message
+            setTimeout(() => {
+                document.getElementById('finaleText').classList.add('show');
+            }, 800);
+        });
+
+    </script>
+</body>
+</html>
