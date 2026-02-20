@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Happy Birthday Gulabo ❤️</title>
+    <title>Happy Birthday Gulaboo ❤️</title>
     
     <!-- Google Fonts for Cinematic Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
@@ -195,7 +195,7 @@
             color: var(--cream);
             text-shadow: 0 0 10px rgba(255, 245, 225, 0.3);
             white-space: pre-wrap;
-            min-height: 400px; /* Prevents height jumping */
+            min-height: 400px;
             text-align: left;
         }
 
@@ -255,14 +255,31 @@
             background: radial-gradient(circle at center, #2e0814 0%, #000 100%);
         }
 
+        .cake-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--pink);
+            text-shadow: 0 0 20px rgba(255, 143, 171, 0.8), 0 0 5px #fff;
+            margin-bottom: 10px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 1.5s ease 0.5s;
+        }
+
+        #scene4.active .cake-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .cake-container {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 320px;
+            height: 320px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7));
             transition: opacity 2s ease;
         }
@@ -311,7 +328,8 @@
             .btn-glow { font-size: 1.2rem; padding: 15px 30px; }
             .typewriter-text { font-size: 1rem; min-height: 480px; line-height: 1.6; }
             .typewriter-text .highlight { font-size: 1.6rem; }
-            .cake-container { width: 250px; height: 250px; }
+            .cake-title { font-size: 2.5rem; margin-bottom: 5px;}
+            .cake-container { width: 260px; height: 260px; margin-bottom: 20px; }
             .finale-text { font-size: 2.8rem; }
             .glass-card { padding: 30px 20px; }
         }
@@ -357,22 +375,36 @@
 
     <!-- SCENE 4: Final Birthday Cake -->
     <section id="scene4" class="scene">
+        
+        <!-- NEW Floating Glowing Title -->
+        <div class="cake-title">Happy Birthday Gulaboo ❤️</div>
+
         <div class="cake-container" id="cakeContainer">
-            <!-- 3D SVG Cake -->
-            <svg viewBox="0 0 300 300" width="100%" height="100%">
+            <!-- LUXURY 2-TIER 3D SVG CAKE -->
+            <svg viewBox="0 0 300 320" width="100%" height="100%">
                 <defs>
-                    <linearGradient id="cakeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#ff8fab" />
+                    <linearGradient id="cakeGradBase" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ff7597" />
                         <stop offset="50%" stop-color="#ffb6c1" />
-                        <stop offset="100%" stop-color="#ff8fab" />
+                        <stop offset="100%" stop-color="#ff7597" />
                     </linearGradient>
-                    <linearGradient id="creamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#fff5e1" />
+                    
+                    <linearGradient id="creamGradBase" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#fdfbf7" />
                         <stop offset="50%" stop-color="#ffffff" />
-                        <stop offset="100%" stop-color="#fff5e1" />
+                        <stop offset="100%" stop-color="#fdfbf7" />
                     </linearGradient>
+
+                    <linearGradient id="goldStand" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#bf953f" />
+                        <stop offset="25%" stop-color="#fcf6ba" />
+                        <stop offset="50%" stop-color="#b38728" />
+                        <stop offset="75%" stop-color="#fbf5b7" />
+                        <stop offset="100%" stop-color="#aa771c" />
+                    </linearGradient>
+
                     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur stdDeviation="5" result="blur" />
+                        <feGaussianBlur stdDeviation="4" result="blur" />
                         <feComposite in="SourceGraphic" in2="blur" operator="over" />
                     </filter>
                     
@@ -382,7 +414,7 @@
                         <stop offset="50%" stop-color="#c0001a"/>
                         <stop offset="100%" stop-color="#5e000c"/>
                     </radialGradient>
-                    <g id="red-rose" transform="scale(0.85)">
+                    <g id="red-rose" transform="scale(0.8)">
                         <!-- Leaves -->
                         <path d="M0,0 Q-15,-10 -20,5 Q-5,15 0,0" fill="#0f3b15"/>
                         <path d="M0,0 Q15,-15 25,-5 Q15,10 0,0" fill="#0f3b15"/>
@@ -395,49 +427,76 @@
                     </g>
                 </defs>
 
+                <!-- Elegant Gold Cake Stand -->
+                <!-- Base -->
+                <ellipse cx="150" cy="290" rx="50" ry="12" fill="url(#goldStand)" />
+                <path d="M 100 290 L 105 300 A 45 10 0 0 0 195 300 L 200 290 Z" fill="#8c6214"/>
+                <!-- Stem -->
+                <path d="M 135 250 L 165 250 L 155 290 L 145 290 Z" fill="url(#goldStand)" />
                 <!-- Plate -->
-                <ellipse cx="150" cy="250" rx="120" ry="30" fill="#2a0814" />
-                <ellipse cx="150" cy="245" rx="110" ry="25" fill="#3a0c1c" />
+                <ellipse cx="150" cy="250" rx="120" ry="25" fill="#1a050d" />
+                <ellipse cx="150" cy="245" rx="115" ry="22" fill="url(#goldStand)" />
 
-                <!-- Cake Base -->
-                <path d="M 50 160 L 50 230 A 100 30 0 0 0 250 230 L 250 160 Z" fill="url(#cakeGrad)" />
-                <ellipse cx="150" cy="230" rx="100" ry="30" fill="url(#cakeGrad)" opacity="0.5"/>
+                <!-- TIER 1: Bottom Pink Layer -->
+                <!-- Main Body -->
+                <path d="M 50 180 L 50 240 A 100 20 0 0 0 250 240 L 250 180 Z" fill="url(#cakeGradBase)" />
+                <ellipse cx="150" cy="240" rx="100" ry="20" fill="url(#cakeGradBase)" opacity="0.6"/>
+                <!-- Top Oval of Tier 1 -->
+                <ellipse cx="150" cy="180" rx="100" ry="20" fill="url(#cakeGradBase)" />
+                
+                <!-- Vanilla Cream Drips for Tier 1 -->
+                <path d="M 50 180 Q 60 200 75 180 Q 90 215 110 180 Q 130 205 150 180 Q 170 215 190 180 Q 210 195 230 180 Q 240 205 250 180 L 250 170 A 100 20 0 0 0 50 170 Z" fill="url(#creamGradBase)" />
 
-                <!-- Cream Drips & Top -->
-                <path d="M 50 160 Q 60 180 75 160 Q 90 190 110 160 Q 130 185 150 160 Q 170 190 190 160 Q 210 175 230 160 Q 240 180 250 160 L 250 150 A 100 30 0 0 0 50 150 Z" fill="url(#creamGrad)" />
-                <ellipse cx="150" cy="150" rx="100" ry="30" fill="url(#creamGrad)" />
+                <!-- TIER 2: Top White/Cream Layer -->
+                <!-- Main Body -->
+                <path d="M 85 110 L 85 170 A 65 15 0 0 0 215 170 L 215 110 Z" fill="url(#creamGradBase)" />
+                <ellipse cx="150" cy="170" rx="65" ry="15" fill="#e6e4e1" opacity="0.6"/>
+                <!-- Top Oval of Tier 2 -->
+                <ellipse cx="150" cy="110" rx="65" ry="15" fill="url(#creamGradBase)" />
 
-                <!-- Text on Cake -->
-                <text x="150" y="210" font-family="Great Vibes" font-size="24" fill="#5e0b15" text-anchor="middle">Happy Birthday</text>
-                <text x="150" y="235" font-family="Great Vibes" font-size="28" fill="#5e0b15" text-anchor="middle">Gulaboo ❤️</text>
+                <!-- Pink Strawberry Drips for Tier 2 -->
+                <path d="M 85 110 Q 95 130 105 110 Q 120 140 135 110 Q 150 135 165 110 Q 180 145 195 110 Q 205 125 215 110 L 215 105 A 65 15 0 0 0 85 105 Z" fill="url(#cakeGradBase)" />
+
+                <!-- Cute Decorative Pearls/Sprinkles around base of Top Tier -->
+                <circle cx="95" cy="172" r="2.5" fill="#fff" />
+                <circle cx="110" cy="177" r="2.5" fill="#fff" />
+                <circle cx="130" cy="181" r="2.5" fill="#fff" />
+                <circle cx="150" cy="183" r="2.5" fill="#fff" />
+                <circle cx="170" cy="181" r="2.5" fill="#fff" />
+                <circle cx="190" cy="177" r="2.5" fill="#fff" />
+                <circle cx="205" cy="172" r="2.5" fill="#fff" />
 
                 <!-- Candle 1 -->
-                <rect x="100" y="90" width="10" height="55" fill="#fff" rx="2" />
-                <line x1="105" y1="90" x2="105" y2="80" stroke="#333" stroke-width="2" />
-                <path class="flame f1" d="M 105 55 Q 115 70 105 80 Q 95 70 105 55" fill="#ffcc00" filter="url(#glow)"/>
+                <rect x="110" y="60" width="8" height="45" fill="#fff" rx="2" />
+                <line x1="114" y1="60" x2="114" y2="52" stroke="#333" stroke-width="2" />
+                <path class="flame f1" d="M 114 30 Q 122 42 114 52 Q 106 42 114 30" fill="#ffcc00" filter="url(#glow)"/>
 
-                <!-- Candle 2 (Center) -->
-                <rect x="145" y="70" width="10" height="75" fill="#fff" rx="2" />
-                <line x1="150" y1="70" x2="150" y2="60" stroke="#333" stroke-width="2" />
-                <path class="flame f2" d="M 150 35 Q 160 50 150 60 Q 140 50 150 35" fill="#ffcc00" filter="url(#glow)"/>
+                <!-- Candle 2 (Center - slightly taller) -->
+                <rect x="146" y="45" width="8" height="60" fill="#fff" rx="2" />
+                <line x1="150" y1="45" x2="150" y2="37" stroke="#333" stroke-width="2" />
+                <path class="flame f2" d="M 150 15 Q 158 27 150 37 Q 142 27 150 15" fill="#ffcc00" filter="url(#glow)"/>
 
                 <!-- Candle 3 -->
-                <rect x="190" y="90" width="10" height="55" fill="#fff" rx="2" />
-                <line x1="195" y1="90" x2="195" y2="80" stroke="#333" stroke-width="2" />
-                <path class="flame f3" d="M 195 55 Q 205 70 195 80 Q 185 70 195 55" fill="#ffcc00" filter="url(#glow)"/>
+                <rect x="182" y="60" width="8" height="45" fill="#fff" rx="2" />
+                <line x1="186" y1="60" x2="186" y2="52" stroke="#333" stroke-width="2" />
+                <path class="flame f3" d="M 186 30 Q 194 42 186 52 Q 178 42 186 30" fill="#ffcc00" filter="url(#glow)"/>
 
-                <!-- Romantic Red Roses Surrounding the Cake -->
-                <use href="#red-rose" x="65" y="220" />
-                <use href="#red-rose" x="85" y="240" />
-                <use href="#red-rose" x="115" y="250" />
-                <use href="#red-rose" x="150" y="255" />
-                <use href="#red-rose" x="185" y="250" />
-                <use href="#red-rose" x="215" y="240" />
-                <use href="#red-rose" x="235" y="220" />
+                <!-- Romantic Red Roses Surrounding the Cake Plate Base -->
+                <use href="#red-rose" x="50" y="240" />
+                <use href="#red-rose" x="80" y="255" />
+                <use href="#red-rose" x="115" y="265" />
+                <use href="#red-rose" x="150" y="270" />
+                <use href="#red-rose" x="185" y="265" />
+                <use href="#red-rose" x="220" y="255" />
+                <use href="#red-rose" x="250" y="240" />
+                
+                <!-- A couple of tiny roses resting on the cake tiers -->
+                <use href="#red-rose" x="80" y="200" transform="scale(0.7) translate(30, 80)" />
+                <use href="#red-rose" x="190" y="150" transform="scale(0.6) translate(130, 100)" />
             </svg>
         </div>
         
-        <button id="blowBtn" class="btn-glow" style="margin-bottom: 30px;">Blow the Candles</button>
+        <button id="blowBtn" class="btn-glow" style="margin-bottom: 20px;">Blow the Candles</button>
         
         <div id="finaleText" class="finale-text">
             Forever yours,<br>
@@ -725,20 +784,12 @@
             // 3. CINEMATIC LIGHTS OUT EFFECT
             document.body.style.backgroundColor = '#000000'; 
             document.getElementById('scene4').style.background = 'radial-gradient(circle at center, #050002 0%, #000000 100%)';
-            document.getElementById('cakeContainer').style.opacity = '0.3'; // Dim the cake slightly
+            document.getElementById('cakeContainer').style.opacity = '0.4'; // Dim the cake slightly
+            document.querySelector('.cake-title').style.opacity = '0.6'; // Dim the title slightly
 
-            // 4. Trigger Whisper
-            try {
-                if ('speechSynthesis' in window) {
-                    const utterance = new SpeechSynthesisUtterance("Happy Birthday Gulabo");
-                    utterance.volume = 0.5; 
-                    utterance.rate = 0.8;   
-                    utterance.pitch = 1.2;  
-                    window.speechSynthesis.speak(utterance);
-                }
-            } catch(e) { console.log("Speech synthesis error", e); }
+            // Note: Voice code completely removed as requested!
 
-            // 5. Fireworks Confetti (stands out against the black background)
+            // 4. Fireworks Confetti (stands out against the black background)
             var duration = 10 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
@@ -759,7 +810,7 @@
                 confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
             }, 250);
 
-            // 6. Show Glowing Final Message
+            // 5. Show Glowing Final Message
             setTimeout(() => {
                 document.getElementById('finaleText').classList.add('show');
             }, 800);
